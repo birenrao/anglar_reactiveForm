@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+  <div class="container">
+    <div>
+      <h3>Division math test</h3>
+      <label for="firstValue">Dividend value</label>
+      <input id='firstValue' (keyup)="calculateResult($event)" formControlName="firstValue" type="text">
+      <div *ngIf="firstValue?.touched && firstValue?.invalid">
+        <div class="validation-msg" *ngIf="firstValue?.errors?.required">value is require</div>
+        <div class="validation-msg" *ngIf="firstValue?.errors?.pattern">Please enter valid number</div>
+      </div>
+    </div>
+    <div>
+      <label for="secondValue">Divisor value</label>
+      <input id='secondValue' (keyup)="calculateResult($event)" formControlName="secondValue" type="text">
+      <div *ngIf="secondValue?.touched && secondValue?.invalid">
+        <div class="validation-msg" *ngIf="secondValue?.errors?.required">value is require</div>
+        <div class="validation-msg" *ngIf="secondValue?.errors?.pattern">Please enter valid numbere</div>
+        <div class="validation-msg" *ngIf="secondValue?.errors?.cannotContainsZero">Divisor can not be zero</div>
+      </div>
+    </div>
+    <div>
+      <div id="resultValue">Result: {{resultValue}}</div>
+    </div>
+  </div>
+</form>
