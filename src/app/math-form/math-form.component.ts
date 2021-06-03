@@ -36,7 +36,6 @@ export class MathFormComponent implements OnInit {
 
   calculateResult(event: any) {
     const value = event.target.value;
-
     this.calculatePause.next(value);
   }
 

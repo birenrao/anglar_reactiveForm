@@ -1,5 +1,5 @@
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { AbstractControl } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { MathFormComponent } from './math-form.component';
@@ -75,8 +75,10 @@ describe('MathFormComponent', () => {
     input.nativeElement.dispatchEvent(new KeyboardEvent('keyup', {}));
     firstValueEle.touched.valueOf();
     fixture.detectChanges();
-    expect(component.form.valid).toBeTruthy();
-    expect(resultValueEle.nativeElement.innerHTML).toBe('Result: 2.00');
+    fixture.whenStable().then(() => {
+      expect(component.form.valid).toBeTruthy();
+      expect(resultValueEle.nativeElement.innerHTML).toBe('Result: 2.00');
+    });
   });
 
   it('If first and second value update with invalid input show error', () => {
@@ -110,11 +112,15 @@ describe('MathFormComponent', () => {
     input = fixture.debugElement.query(By.css('#secondValue'));
     input.nativeElement.dispatchEvent(new KeyboardEvent('keyup', {}));
     firstValueEle.touched.valueOf();
-    fixture.detectChanges();
-    expect(component.form.valid).toBeFalsy();
 
-    expect(firstValueEle.hasError('pattern')).toEqual(true);
-    expect(secondValueEle.hasError('pattern')).toEqual(false);
+    fixture.detectChanges();
+    //tick(500);
+    fixture.whenStable().then(() => {
+      expect(component.form.valid).toBeFalsy();
+
+      expect(firstValueEle.hasError('pattern')).toEqual(true);
+      expect(secondValueEle.hasError('pattern')).toEqual(false);
+    });
   });
 
   it('if divisor with valid value then show result', () => {
@@ -127,7 +133,10 @@ describe('MathFormComponent', () => {
     input = fixture.debugElement.query(By.css('#secondValue'));
     input.nativeElement.dispatchEvent(new KeyboardEvent('keyup', {}));
     fixture.detectChanges();
-    expect(resultValueEle.nativeElement.innerHTML).toBe('Result: 2.00');
+    //tick(500);
+    fixture.whenStable().then(() => {
+      expect(resultValueEle.nativeElement.innerHTML).toBe('Result: 2.00');
+    });
   });
 
   it('if divisor with 0 value then show error', () => {
@@ -139,8 +148,14 @@ describe('MathFormComponent', () => {
     secondValueEle.setValue('0');
     input = fixture.debugElement.query(By.css('#secondValue'));
     input.nativeElement.dispatchEvent(new KeyboardEvent('keyup', {}));
+    component.calculateResult(event);
 
-    expect(component.form.valid).toBeFalsy();
-    expect(secondValueEle.hasError('cannotContainsZero')).toEqual(true);
+    fixture.detectChanges();
+    fixture.detectChanges();
+    //tick(500);
+    fixture.whenStable().then(() => {
+      expect(component.form.valid).toBeFalsy();
+      expect(secondValueEle.hasError('cannotContainsZero')).toEqual(true);
+    });
   });
 });

@@ -18,6 +18,10 @@
   box-shadow: 7px 7px 16px 0px rgba(50, 50, 50, 0.44);
 }
 
+hr.divider {
+  border: 1px solid black;
+}
+
 .container > div > h3 {
   text-align: center;
   padding-bottom: 20px;
